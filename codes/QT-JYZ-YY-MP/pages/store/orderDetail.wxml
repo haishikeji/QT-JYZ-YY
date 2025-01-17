@@ -1,0 +1,246 @@
+<view class="detail">
+  <view class="detail-box">
+    <view class="order-top flex-space-between">
+      <text>订单号:{{item.orderNo}}</text>
+      <view class="top-right">
+        <text wx:if="{{item.payType==0 && type=='order'}}">0元支付</text>
+        <text wx:if="{{item.payType==1 && type=='order'}}">懿通宝</text>
+        <text wx:if="{{item.payType==2 && type=='order'}}">小程序</text>
+        <text wx:if="{{item.payType==0 && type=='orderReturn'}}">小程序</text>
+        <text wx:if="{{item.payType==1 && type=='orderReturn'}}">app</text>
+        <text wx:if="{{item.payType==2 && type=='orderReturn'}}">后台补单</text>
+        <text wx:if="{{item.state == 0}}" style="color: #FFB800;">待支付</text>
+        <text wx:elif="{{item.state == 1}}" style="color: #61A976;">已完成</text>
+        <text wx:elif="{{item.state == 2}}" style="color: grey;">已取消</text>
+        <text wx:elif="{{item.state == 3}}" style="color: #FF5722;">售后</text>
+        <view class="order-line"></view>
+        <text wx:if="{{item.type==1}}">充值</text>
+        <text wx:if="{{item.type==2}}">加油</text>
+        <view class="order-line"></view>
+        <text wx:if="{{item.payStatus == 0 && item.isCancel==0  }}" style="color: #FFB800;">待支付</text>
+        <text wx:elif="{{item.payStatus == 1 && item.isCancel==0 }}" style="color: #61A976;">部分支付</text>
+        <text wx:elif="{{item.payStatus == 2 && item.isCancel==0  }}" style="color: grey;">已完成</text>
+        <text wx:elif="{{item.isCancel==1  }}" style="color: grey;">已取消</text>
+      </view>
+    </view>
+    <view class="order-middle">
+      <block wx:if="{{item.type==2}}">
+        <view class="flex-space-between">
+          <text class="order-name">{{orderItem.oilNumber}}</text>
+          <text>￥{{orderItem.price}}/升</text>
+        </view>
+        <view class="flex-space-between">
+          <text>油枪：{{orderItem.oilGgun}}</text>
+          <text>{{orderItem.num}}升</text>
+        </view>
+      </block>
+
+      <block wx:if="{{item.type==1}}">
+        <view class="flex-space-between">
+          <text class="order-name">充值金额</text>
+          <text>￥{{item.totalAmount}}</text>
+        </view>
+        <view class="flex-space-between">
+          <text>充值赠送</text>
+          <text>+￥{{item.discountAmount}}</text>
+        </view>
+      </block>
+    </view>
+    <view class="flex-space-between">
+      <text>合计</text>
+      <text>￥{{item.totalAmount}}</text>
+    </view>
+    <view class="flex-space-between" wx:if="{{item.discountAmount}}">
+      <text>优惠 <block wx:if="{{item.discountContent}}">（{{item.discountContent}}）</block></text>
+      <text>-￥{{item.discountAmount}}</text>
+    </view>
+    <view class="flex-space-between">
+      <text>实付</text>
+      <text class="detail-total">￥{{item.paidAmount}}</text>
+    </view>
+  </view>
+  <view class="detail-box detail-info">
+    <image src="{{item.userAvatar}}"  mode="aspectFill"></image>
+    <view class="info-content">
+      <text>{{item.userName}}</text>
+      <text>{{item.mobile}}</text>
+    </view>
+  </view>
+  <view class="detail-box" wx:if="{{type=='order'}}">
+    <view class="flex-space-between">
+      <text>支付金额</text>
+      <text>￥{{item.paidAmount}}</text>
+    </view>
+    <view class="flex-space-between" wx:if="{{item.payTypeName}}">
+      <text>支付方式</text>
+      <text>{{item.payTypeName}}</text>
+    </view>
+    <view class="flex-space-between" wx:if="{{item.payOrderNo}}">
+      <text>支付单号</text>
+      <text>{{item.payOrderNo}}</text>
+    </view>
+    <!-- <block wx:if="{{pay.oilPrice > 0}}">
+      <view class="detail-split"></view>
+      <view class="flex-space-between">
+        <text>支付金额</text>
+        <text>￥{{pay.oilPrice}}</text>
+      </view>
+      <view class="flex-space-between">
+        <text>支付方式</text>
+        <text>加油金支付</text>
+      </view>
+    </block> -->
+    <!-- <block wx:if="{{pay.cardPrice > 0}}">
+      <view class="detail-split"></view>
+      <view class="flex-space-between">
+        <text>支付金额</text>
+        <text>￥{{pay.cardPrice}}</text>
+      </view>
+      <view class="flex-space-between">
+        <text>支付方式</text>
+        <text>油卡支付</text>
+      </view>
+    </block> -->
+  </view>
+  <view class="detail-box" wx:if="{{type=='order'}}">
+    <view class="flex-space-between">
+      <text>下单时间</text>
+      <text>{{item.createTime}}</text>
+    </view>
+    <view class="flex-space-between" wx:if="{{item.payTime && (item.payStatus == 1 || item.payStatus == 2)}}">
+      <text>支付时间</text>
+      <text>{{item.payTime}}</text>
+    </view>
+    <block wx:if="{{item.printTicketCount > 0 && type=='order'}}">
+
+      <view class="detail-split"></view>
+      <view class="flex-space-between">
+        <text>小票打印次数</text>
+        <text>{{item.printTicketCount}}</text>
+      </view>
+      <view class="flex-space-between">
+        <text>最近一次打印时间</text>
+        <text>{{item.printTicketTime}}</text>
+      </view>
+      <view class="flex-space-between">
+        <text>最近一次打印人</text>
+        <text>{{item.printTicketUser}}</text>
+      </view>
+    </block>
+  </view>
+  <view class="detail-box detail-refund" wx:if="{{type=='orderReturn'}}">
+    <view class="flex-space-between">
+      <text>售后状态</text>
+      <text wx:if="{{orderReturn.status == 0 && orderReturn.isCancel==0}}" style="color: #FF5722;">待审核</text>
+      <text wx:elif="{{orderReturn.status == 1 && orderReturn.isCancel==0}}" style="color: grey;">待退款</text>
+      <text wx:elif="{{orderReturn.status == 2 && orderReturn.isCancel==0}}" style="color: #61A976;">已退款</text>
+      <text wx:elif="{{orderReturn.status == 3 && orderReturn.isCancel==0}}" style="color: grey;">拒绝退款</text>
+      <text wx:elif="{{orderReturn.isCancel==1}}" style="color: #61A976;">取消</text>
+    </view>
+  </view>
+  <view class="detail-box" wx:if="{{type=='orderReturn'}}">
+    <view class="flex-space-between">
+      <text>申请时间</text>
+      <text>{{orderReturn.createTime}}</text>
+    </view>
+    <view class="flex-space-between">
+      <text>退费原因</text>
+      <text>{{orderReturn.remark}}</text>
+    </view>
+    <view class="flex-space-between " wx:if="{{orderReturn.returnAccoun}}">
+      <text>退费说明</text>
+    </view>
+    <view class="flex-space-between detail-remarks" wx:if="{{orderReturn.returnAccoun}}">
+      <text>{{orderReturn.returnAccount}}</text>
+    </view>
+    <view class="detail-split"></view>
+    <view class="flex-space-between">
+      <text>退费单号</text>
+      <text>{{orderReturn.orderReturnNo}}</text>
+    </view>
+    <view class="flex-space-between">
+      <text>退费内容</text>
+      <text>{{ori.oilTypeName}} {{ori.oilNumber}} ￥{{ori.price}}/升 {{ori.returnNum}}升</text>
+    </view>
+    <view class="flex-space-between">
+      <text>退费金额</text>
+      <text>￥{{orderReturn.returnAmount}}</text>
+    </view>
+    <view class="detail-split"></view>
+    <view class="flex-space-between" wx:if="{{orderReturn.auditTime}}">
+      <text>审核时间</text>
+      <text>{{orderReturn.auditTime}}</text>
+    </view>
+    <view class="flex-space-between" wx:if="{{orderReturn.auditRemark}}">
+      <text>审核结果</text>
+      <text>{{orderReturn.auditRemark || ''}}</text>
+    </view>
+    <view class="flex-space-between" wx:if="{{orderReturn.refundTime}}">
+      <text>退费时间</text>
+      <text>{{orderReturn.refundTime}}</text>
+    </view>
+    <view class="flex-space-between" wx:if="{{orderReturn.balanceReturn + orderReturn.refundAmount > 0}}">
+      <text>实退金额</text>
+      <text >￥{{(orderReturn.balanceReturn + orderReturn.refundAmount) || ''}}</text>
+    </view>
+    <!-- <view class="detail-split"></view> -->
+    <!-- <view class="flex-space-between">
+      <text>退费明细</text>
+    </view>
+    <block wx:if="{{refund.thirdPartyPrice > 0}}">
+      <view class="flex-space-between">
+        <text>第三方支付退费</text>
+        <text>-￥{{refund.thirdPartyPrice}}</text>
+      </view>
+    </block>
+    <block wx:if="{{refund.oilPrice > 0}}">
+      <view class="flex-space-between">
+        <text>加油金退费</text>
+        <text>-￥{{refund.oilPrice}}</text>
+      </view>
+    </block> -->
+
+  </view>
+
+  <view class="detail-btn flex-space-between">
+    <block wx:if="{{type=='orderReturn' && orderReturn.status == 0 && orderReturn.isCancel==0 && orderReturnAuditPermission==1}}">
+      <view class="refund-btn print-btn01" catchtap="openCode">退费审核</view>
+    </block>
+    <block wx:if="{{item.payStatus == 2 && item.isCancel==0  && type=='order' && orderPrintPermission==1}}">
+      <view class="print-btn print-btn01" catchtap='orderPrint'>打印小票({{item.printTicketCount}})</view>
+    </block>
+  </view>
+
+
+  <mp-dialog bindclose="closeRefund" title="退费审核" ext-class="code-popup" show="{{showCode}}" bindbuttontap="confirmRefund" buttons="{{oneButton}}">
+    <view class="order-refund">
+      <view class="refund-line">
+        <text class="refund-text">退费审核</text>
+        <view class="refund-msg">
+          <radio-group bindchange="radioChange">
+            <label class="radio">
+              <radio value="0" checked="{{isAgree == 0}}" color="#61A976" />同意退款
+            </label>
+            <label class="radio">
+              <radio value="1" checked="{{isAgree == 1}}" color="#61A976" />拒绝退款
+            </label>
+          </radio-group>
+        </view>
+      </view>
+      <view class="refund-line" wx:if="{{isAgree == 0}}">
+        <text class="refund-text">退费金额</text>
+        <view class="refund-msg">
+          <input type="digit" placeholder="请输入退费金额" value="{{refundPrice}}" bindinput="getRefundPrice" maxlength="20" />
+          <text class="refund-unit">元</text>
+        </view>
+      </view>
+    
+      <view class="refund-line refund-remarks" wx:if="{{isAgree == 1}}">
+        <text class="refund-text">审核备注</text>
+        <view class="refund-msg">
+          <textarea bindinput="getRemarks" placeholder-class="line-place" value="{{remarks}}" placeholder="请输入备注" maxlength="200" disable-default-padding="true" />
+        </view>
+      </view>
+    </view>
+  </mp-dialog>
+</view>

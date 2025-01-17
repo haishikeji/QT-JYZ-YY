@@ -1,0 +1,67 @@
+<view class="total">
+<view class="order-top">
+  <view class="order-line">
+    <text>用户昵称：{{name}}</text>
+  </view>
+  <view class="order-line" wx:if="{{flag}}">
+    <text>员工：{{realName}}</text>
+  </view>
+  <view class="order-line">
+    <text>电话号码：{{phone}}</text>
+  </view>
+  <view class="order-line">
+    <text>下单时间：{{startTime}}</text> ~ <text>{{endTime}}</text>
+  </view>
+</view>
+  <block wx:if="{{listData && listData.length > 0}}">
+  
+    <scroll-view class="table-content" style="height: calc(100vh - {{height}});" scroll-y="{{true}}" bindscrolltolower="Reachbottom" bindrefresherrefresh="refresherrefresh" refresher-enabled="{{true}}" show-scrollbar="{{false}}">
+      <block wx:for="{{listData}}" wx:key="id">
+        <view class="table-item">
+        <view class="item-text">
+          <view class="item-top"> 订单号：{{item.orderNo}}</view>
+          <text class="item-time">{{item.createTime}}</text>
+          </view>
+          <view class="item-content">
+            <view class="item-tab flex1">
+              <text>油号</text>
+              <text>{{item.oilNumber}}</text>
+            </view>
+            <view class="item-tab flex1">
+              <text>油枪</text>
+              <text>{{item.oilGun}}</text>
+            </view>
+            <view class="item-tab ">
+              <text>加油升数</text>
+              <text>{{item.num}}L</text>
+            </view>
+            <view class="item-tab">
+              <text>加油金额</text>
+              <text>{{item.totalAmount}}</text>
+            </view>
+            <view class="item-tab">
+              <text>优惠金额</text>
+              <text>{{item.discountAmount}}</text>
+            </view>
+            <view class="item-tab">
+              <text>实付金额</text>
+              <text>{{item.orderAmount}}</text>
+            </view>
+          </view>
+          <view class="item-bottom">
+            {{item.storeName}}
+          </view>
+        </view>
+      </block>
+      <view class="order-tips">
+        <text wx:if="{{is_loading == 0}}">加载中...</text>
+        <text wx:if="{{is_no_more == 1 && is_loading == 1}}">没有更多了~</text>
+      </view>
+    </scroll-view>
+  </block>
+  <view class="store-order-wrapper" wx:else>
+    <image src="/static/images/order/default_img_order.png"></image>
+    <text>暂无数据！</text>
+  </view>
+
+</view>

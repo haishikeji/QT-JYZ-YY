@@ -1,0 +1,111 @@
+<view class="detail">
+  <view class="detail-box">
+    <view class="edit-line">
+      <view class="line-text">活动标签</view>
+      <view class="line-content">
+        <view class="line-msg">
+          <input type="text" placeholder-class="line-place" placeholder="请输入活动标签，4字以内" bindinput="getName" value="{{title}}" maxlength="4" />
+        </view>
+      </view>
+    </view>
+    <DatetimePicker mode="dateminute" value="{{startTime}}" bindchange="startTimeChange">
+      <view class="edit-line">
+        <view class="line-text">活动开始时间</view>
+        <view class="line-content">
+          <view class="line-msg " style=" color : {{ startTime ? '' : '#ccc' }}">{{startTime || '请选择活动开始时间'}}</view>
+          <view class="line-right">
+            <image src="../../images/store/arrow_r.png" alt="" />
+          </view>
+        </view>
+      </view>
+    </DatetimePicker>
+    <DatetimePicker mode="dateminute" value="{{endTime}}" bindchange="endTimeChange">
+      <view class="edit-line">
+        <view class="line-text">活动结束时间</view>
+        <view class="line-content">
+          <view class="line-msg" style=" color : {{ endTime ? '' : '#ccc' }}">{{endTime || '请选择活动结束时间' }}</view>
+          <view class="line-right">
+            <image src="../../images/store/arrow_r.png" alt="" />
+          </view>
+        </view>
+      </view>
+    </DatetimePicker>
+
+    <view class="edit-line edit-textarea">
+      <view class="line-text">活动说明</view>
+      <view class="line-content">
+        <textarea bindinput="getContent" placeholder-class="line-place" value="{{content}}" placeholder="请输入活动说明" maxlength="200" disable-default-padding="true" class="line-textarea" />
+      </view>
+    </view>
+    <view class="edit-line">
+      <view class="line-text">上架</view>
+      <view class="line-content">
+        <view class="line-msg">
+          <switch checked="{{show}}" bindchange="showChange" color="#69A7F8" />
+        </view>
+      </view>
+    </view>
+  </view>
+  <view class="detail-box">
+    <picker bindchange="typePickerChange" value="{{typeIndex}}" range="{{typeList}}" range-key='name'>
+      <view class="edit-line">
+        <view class="line-text">优惠类型</view>
+        <view class="line-content">
+          <view class="line-msg">{{typeActive}}</view>
+          <view class="line-right">
+            <image src="../../images/store/arrow_r.png" alt="" />
+          </view>
+        </view>
+      </view>
+    </picker>
+
+    <view class="edit-line" wx:for="{{discountList}}" wx:key="index">
+      <view class="detail-type">
+        满<input type="edit" value="{{item.full}}" bindinput="getInput" data-type="full" data-index="{{index}}" placeholder-class="line-place" placeholder="请输入{{typeIndex == 0 ? '油量' : '金额'}}" maxlength="6" />
+        <text wx:if="{{typeIndex == 0}}">升，每升减</text>
+        <text wx:if="{{typeIndex == 1}}">元，减</text>
+        <text wx:if="{{typeIndex == 2}}">元，每升减</text>
+        <input type="edit" value="{{item.num}}" bindinput="getInput" data-type="num" data-index="{{index}}" placeholder-class="line-place" placeholder="请输入金额" maxlength="6" />元
+      </view>
+      <icon wx:if="{{ discountList.length > 1}}" bindtap="delDiscount" data-typeIndex="{{index}}" class="icon-small" type="cancel" size="20" color="#ccc"></icon>
+    </view>
+    <view class="edit-line detail-btn">
+      <view class="add-btn" bindtap="addDiscount">添加优惠</view>
+    </view>
+  </view>
+  <view class="detail-box">
+    <view class="edit-line">
+      <view class="line-text">适用油号</view>
+      <view class="line-content">
+        <radio-group bindchange="radioChange">
+          <label class="radio">
+            <radio value="0" checked="{{oilNoActive == 0}}" color="#61A976" />全部油号
+          </label>
+          <label class="radio">
+            <radio value="1" checked="{{oilNoActive == 1}}" color="#61A976" />指定油号
+          </label>
+        </radio-group>
+      </view>
+    </view>
+    <view class="detail-oil" wx:if="{{oilNoActive == 1}}">
+      <view class="detail-item" wx:for="{{oilNoList}}" wx:key="index">
+        <view class="detail-oils">
+          <checkbox-group bindchange="allCheckChange" data-index="{{index}}">
+            <label class="oils-text">
+              <checkbox value="{{item.oilTypeId}}" checked="{{item.allCheck}}" color="#61A976" />{{item.oilType}}
+            </label>
+          </checkbox-group>
+        </view>
+        <view class="detail-oil-no">
+          <checkbox-group bindchange="checkboxChange" data-index="{{index}}">
+            <label class="oilNo-text" wx:for="{{item.oilNumberList}}" wx:for-item="oil" wx:for-index="oilIndex" wx:key="oilIndex">
+              <checkbox value="{{oil.id}}" checked="{{oil.check}}" color="#61A976" />{{oil.oilNumber}}
+            </label>
+          </checkbox-group>
+        </view>
+      </view>
+    </view>
+  </view>
+  <view class="store-bottom-btn" bindtap="getDiscountSave">保存</view>
+
+</view>
